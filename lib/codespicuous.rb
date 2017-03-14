@@ -7,13 +7,7 @@ require_relative 'codespicuous/participants.rb'
 require_relative 'codespicuous/teams.rb'
 require_relative 'codespicuous/repositories.rb'
 require_relative 'codespicuous/commits.rb'
-
 require_relative 'codespicuous/commitstatistics.rb'
-
-require_relative 'codespicuous/danielparser.rb'
-
-# Parsers
-require_relative 'codespicuous/danielparser.rb'
 
 # SVN
 require_relative 'codespicuous/svn_client.rb'

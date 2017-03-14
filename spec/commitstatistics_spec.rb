@@ -3,35 +3,39 @@ require 'codespicuous'
 
 describe "Team commits per week table" do
 
-  commits_in_daniel_format = "
-repository: osaka
-*** basvodde
-team:                  Wine
-commits in week:
-  2016-04-17: 2 commits
-  2016-05-01: 2 commits
+  participants = Participants.new
+  bas = Participant.new "basvodde"
+  bas.team = "Wine"
+  participants.add bas
 
-*** daniel
-team:                  Cheese
-commits in week:
-  2016-03-27: 1 commits
+  daniel =  Participant.new "daniel"
+  daniel.team = "Cheese"
+  participants.add daniel
 
-*** basvodde
-team:                  Wine
-commits in week:
-  2016-03-13: 4 commits
-  2016-04-03: 1 commits
+  janne = Participant.new "janne"
+  janne.team = "Wine"
+  participants.add janne
 
-repository: cpputest
+  commits = Commits.new
+  commits.add Commit.new( { :revision => 42, :author => "basvodde", :date => DateTime.parse("2016-04-17"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 43, :author => "basvodde", :date => DateTime.parse("2016-04-18"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 44, :author => "basvodde", :date => DateTime.parse("2016-05-01"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 45, :author => "basvodde", :date => DateTime.parse("2016-05-01"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 46, :author => "basvodde", :date => DateTime.parse("2016-03-13"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 47, :author => "basvodde", :date => DateTime.parse("2016-03-13"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 48, :author => "basvodde", :date => DateTime.parse("2016-03-15"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 49, :author => "basvodde", :date => DateTime.parse("2016-03-13"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 50, :author => "basvodde", :date => DateTime.parse("2016-04-03"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 51, :author => "daniel",   :date => DateTime.parse("2016-03-27"), :repository => "osaka" } )
+  commits.add Commit.new( { :revision => 52, :author => "janne",    :date => DateTime.parse("2016-02-28"), :repository => "cpputest" } )
+  commits.add Commit.new( { :revision => 53, :author => "janne",    :date => DateTime.parse("2016-04-03"), :repository => "cpputest" } )
+  commits.add Commit.new( { :revision => 54, :author => "janne",    :date => DateTime.parse("2016-04-03"), :repository => "cpputest" } )
+  commits.add Commit.new( { :revision => 55, :author => "janne",    :date => DateTime.parse("2016-04-03"), :repository => "cpputest" } )
+  commits.add Commit.new( { :revision => 56, :author => "janne",    :date => DateTime.parse("2016-05-15"), :repository => "cpputest" } )
+  commits.add Commit.new( { :revision => 57, :author => "janne",    :date => DateTime.parse("2016-05-15"), :repository => "cpputest" } )
+  commits.add Commit.new( { :revision => 58, :author => "janne",    :date => DateTime.parse("2016-05-15"), :repository => "cpputest" } )
 
-*** janne
-team: Wine
-commits in week:
-  2016-02-28: 1 commits
-  2016-04-03: 3 commits
-  2016-05-15: 3 commits"
-
-  subject { DanielFormatParser.new.parse(commits_in_daniel_format) }
+  subject { CommitStatistics.new(commits, participants) }
 
   it "calculates the amount of committers" do
     expect(subject.amount_of_comitters).to eq(3)

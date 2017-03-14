@@ -19,8 +19,14 @@ end
 
 class Commit
 
-  def initialize
-    @changes = []
+  def initialize args = {}
+    @author = args[:author]
+    @revision = args[:revision]
+    @message = args[:message]
+    @participant = args[:participant]
+    @date = args[:date]
+    @repository = args[:repository]
+    @changes = args[:changes]
   end
 
   attr_accessor :author, :revision, :message, :participant, :date, :changes, :repository

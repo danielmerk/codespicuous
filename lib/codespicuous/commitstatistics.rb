@@ -8,8 +8,14 @@ class CommitStatisticsForCommitterInRepository
     self.commits = {}
   end
 
-  def commit(date, amount)
-    @commits[DateTime.parse(date.to_s)] = amount.to_i
+  def start_of_week date
+    date.to_date - date.wday
+  end
+
+  def commit(date)
+    week = start_of_week date
+    @commits[week] = 0 if !@commits.has_key?(week)
+    @commits[week] += 1
   end
 
   def amount_of_commits
@@ -50,8 +56,8 @@ class CommitStatisticsForCommitter
     self.commits_in_repositories = {}
   end
 
-  def commit(repository, date, amount)
-    repository(repository).commit(date, amount)
+  def commit(repository, date)
+    repository(repository).commit(date)
   end
 
   def repository name
@@ -107,12 +113,16 @@ class CommitStatistics
 
   attr_accessor :committer_statistics
 
-  def initialize
+  def initialize commits, participants
     self.committer_statistics = {}
+    commits.each { |c|
+      commit(c.author, c.repository, c.date, participants)
+    }
   end
 
-  def commit(loginname, repository, date, amount)
-    committer(loginname).commit(repository, date, amount)
+  def commit(loginname, repository, date, participants)
+    committer(loginname).commit(repository, date)
+    committer(loginname).team = participants.find_by_loginname(loginname).team
   end
 
   def committer loginname
